@@ -1,26 +1,31 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, {useState} from 'react';
 import './App.css';
+import {Counter} from "./components/Counter";
+import {Settings} from "./components/Settings";
+
+export type SettingsType = {
+    startValue: number
+    maxValue: number
+    info: string
+    error: string
+}
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+
+    const [settings, setSettings] = useState<SettingsType>({startValue: 0, maxValue: 1, info: 'Enter values and press Set', error: ''})
+
+    console.log(settings)
+
+    const setSettingsCallback = (startValue: number, maxValue: number, info: string, error: string) => {
+        setSettings({startValue, maxValue, info, error})
+    }
+
+    return (
+        <div className="App">
+            <Counter settings={settings}/>
+            <Settings settings={settings} setSettings={setSettingsCallback}/>
+        </div>
+    );
 }
 
 export default App;

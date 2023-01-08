@@ -1,0 +1,40 @@
+.settingsParent {
+    width: 250px;
+    height: 200px;
+    border: solid 2px #8a8a8a;
+    border-radius: 10px;
+    background-color: #cecece;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+    margin: 30px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.header {
+    margin: 0;
+    font-size: 12px;
+    font-weight: bolder;
+    border-radius: 5px;
+    padding: 0 10px;
+    background-color: #e0e0e0;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.inputContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: center;
+    border-radius: 5px;
+    padding: 10px;
+    background-color: #e0e0e0;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.input {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+}

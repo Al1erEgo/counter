@@ -71,11 +71,13 @@ export const Settings: React.FC<SettingsPropsType> = (props) => {
                         <p>WARNING !!!</p>
                         <p>{errorMessage}</p>
                     </>
-                    :
-                    <>
-                        <p>CURRENT VALUES:</p>
-                        <p>Max value: {settings.maxValue} && Start value: {settings.startValue}</p>
-                    </>}
+                    : settings.info && settings.switcher ?
+                        <p>{settings.info}</p>
+                        :
+                        <>
+                            <p>CURRENT VALUES:</p>
+                            <p>Max value: {settings.maxValue} && Start value: {settings.startValue}</p>
+                        </>}
             </div>
             <div className={s.inputContainer}>
                 <div className={s.input}>

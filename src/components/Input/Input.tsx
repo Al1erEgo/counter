@@ -30,7 +30,7 @@ export const Input: React.FC<InputPropsType> = (props) => {
     return (
         <input type='number'
                className={inputClass}
-               value={currentValue.toString().replace(/^0+/,'')}
+               value={currentValue.toString()}
                onChange={onChangeHandler}
                onFocus={onFocusHandler}
                onBlur={onBlurHandler}

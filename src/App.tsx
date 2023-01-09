@@ -12,7 +12,7 @@ export type SettingsType = {
 
 function App() {
 
-    const [settings, setSettings] = useState<SettingsType>({startValue: 0, maxValue: 1, info: 'Enter values and press Set', error: ''})
+    const [settings, setSettings] = useState<SettingsType>({startValue: 0, maxValue: 5, info: '', error: ''})
 
     console.log(settings)
 
@@ -20,10 +20,22 @@ function App() {
         setSettings({startValue, maxValue, info, error})
     }
 
+    const setInfoCallback = (info: string) => {
+        setSettings({...settings, info})
+    }
+
+    const setErrorCallback = (error: string) => {
+        setSettings({...settings, error})
+    }
+
     return (
         <div className="App">
             <Counter settings={settings}/>
-            <Settings settings={settings} setSettings={setSettingsCallback}/>
+            <Settings settings={settings}
+                      setSettings={setSettingsCallback}
+                      setInfo={setInfoCallback}
+                      setError={setErrorCallback}
+            />
         </div>
     );
 }

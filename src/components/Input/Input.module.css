@@ -5,6 +5,7 @@
     border-radius: 3px;
     text-align: right;
     box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.2), 0 2px 10px 0 rgba(0, 0, 0, 0.19);
+    transition: box-shadow 1s, background-color 1s;
 }
 
 .input:focus {
@@ -14,8 +15,12 @@
 
 .error {
     background-color: #ff6464;
+    box-shadow: 0 2px 3px 0 rgba(250, 0, 0, 0.8), 0 2px 10px 0 rgba(255, 0, 0, 0.6);
+    transition: box-shadow 1s, background-color 1s;
 }
 
 .error:focus {
     background-color: #ff6464;
+    box-shadow: 0 2px 3px 0 rgba(250, 0, 0, 0.8), 0 2px 10px 0 rgba(255, 0, 0, 0.6);
+    transition: box-shadow 1s, background-color 1s;
 }

@@ -16,9 +16,18 @@ export type SettingsType = {
 
 function App() {
 
+    const localStorageCheck = (settingsFromLS: string) => {
+        return settingsFromLS.includes('currentCounter') &&
+                settingsFromLS.includes('startValue') &&
+                 settingsFromLS.includes('maxValue') &&
+                  settingsFromLS.includes('info') &&
+                   settingsFromLS.includes('error') &&
+                    settingsFromLS.includes('switcher')
+    }
+
     const [settings, setSettings] = useState<SettingsType>(() => {
         const settingsFromLS = localStorage.getItem('Settings')
-        return settingsFromLS ? JSON.parse(settingsFromLS) : {
+        const parsedSettings: SettingsType = settingsFromLS && localStorageCheck(settingsFromLS) ? JSON.parse(settingsFromLS) : {
             currentCounter: 0,
             startValue: 0,
             maxValue: 5,
@@ -26,6 +35,7 @@ function App() {
             error: '',
             switcher: true
         }
+        return parsedSettings
     })
 
     const setSettingsCallback = (currentCounter: number, startValue: number, maxValue: number, info: string, error: string, switcher: boolean) => {

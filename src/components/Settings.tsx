@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import s from "./Settings.module.css";
 import {Button} from "./Button/Button";
 import {Input} from "./Input/Input";
@@ -23,8 +23,8 @@ export const Settings: React.FC<SettingsPropsType> = (props) => {
 
     const navigate = useNavigate()
 
-    const setButtonCondition = ((startValue === settings.startValue && maxValue === settings.maxValue) || !!(settings.error))
-
+    // const setButtonCondition = ((startValue === settings.startValue && maxValue === settings.maxValue) || !!(settings.error))
+    const setButtonCondition = useMemo ( () =>((startValue === settings.startValue && maxValue === settings.maxValue) || !!(settings.error)) ,[settings.error, startValue, maxValue])
     const backButtonCondition = !!(settings.error)
 
     const maxValueImportError = maxValue < 0 || startValue > maxValue

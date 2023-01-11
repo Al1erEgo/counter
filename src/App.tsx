@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import './App.css';
 import {Counter} from "./components/Counter";
 import {Settings} from "./components/Settings";
@@ -15,56 +15,57 @@ export type SettingsType = {
 
 function App() {
 
-    const [settings, setSettings] = useState<SettingsType>({startValue: 0, maxValue: 5, info: '', error: '', switcher: true})
-
-    console.log(settings)
+    const [settings, setSettings] = useState<SettingsType>(() => {
+        const settingsFromLS = localStorage.getItem('Settings')
+        return settingsFromLS ? JSON.parse(settingsFromLS) : {
+            startValue: 0,
+            maxValue: 5,
+            info: '',
+            error: '',
+            switcher: true
+        }
+    })
 
     const setSettingsCallback = (startValue: number, maxValue: number, info: string, error: string, switcher: boolean) => {
         setSettings({startValue, maxValue, info, error, switcher})
     }
 
-    const setInfoCallback = (info: string) => {
-        setSettings({...settings, info})
-    }
+    const setInfoCallback = (info: string) => setSettings({...settings, info})
+    const setErrorCallback = (error: string) => setSettings({...settings, error})
+    const setSwitcherCallback = (switcher: boolean) => setSettings({...settings, switcher})
 
-    const setErrorCallback = (error: string) => {
-        setSettings({...settings, error})
-    }
-
-    const setSwitcherCallback = (switcher: boolean) => {
-        setSettings({...settings, switcher})
-    }
+    useEffect(() => localStorage.setItem('Settings', JSON.stringify(settings)), [settings])
 
     return (
         <div className="App">
-                <Routes>
-                    <Route path={'/'} element={<Navigate to={'/counter'}/>}/>
-                    <Route path={'/*'} element={<div><Error404/></div>}/>
-                    {
-                        settings.switcher ?
-                            <>
-                                <Route path={'/counter'} element={<Counter settings={settings}
-                                                                           setSwitcher={setSwitcherCallback}
-                                />}/>
-                                <Route path={'/settings'} element={<Settings settings={settings}
-                                                                             setSettings={setSettingsCallback}
-                                                                             setInfo={setInfoCallback}
-                                                                             setError={setErrorCallback}
-                                                                             setSwitcher={setSwitcherCallback}
-                                />}/>
-                            </>
-                            :
-                            <Route path={'/counter'} element={<><Counter settings={settings}
+            <Routes>
+                <Route path={'/'} element={<Navigate to={'/counter'}/>}/>
+                <Route path={'/*'} element={<div><Error404/></div>}/>
+                {
+                    settings.switcher ?
+                        <>
+                            <Route path={'/counter'} element={<Counter  settings={settings}
+                                                                        setSwitcher={setSwitcherCallback}
+                            />}/>
+                            <Route path={'/settings'} element={<Settings settings={settings}
+                                                                         setSettings={setSettingsCallback}
+                                                                         setInfo={setInfoCallback}
+                                                                         setError={setErrorCallback}
                                                                          setSwitcher={setSwitcherCallback}
-                            />
-                                <Settings settings={settings}
-                                          setSettings={setSettingsCallback}
-                                          setInfo={setInfoCallback}
-                                          setError={setErrorCallback}
-                                /></>
-                            }/>
-                    }
-                </Routes>
+                            />}/>
+                        </>
+                        :
+                        <Route path={'/counter'} element={<><Counter settings={settings}
+                                                                     setSwitcher={setSwitcherCallback}
+                        />
+                            <Settings settings={settings}
+                                      setSettings={setSettingsCallback}
+                                      setInfo={setInfoCallback}
+                                      setError={setErrorCallback}
+                            /></>
+                        }/>
+                }
+            </Routes>
         </div>
     );
 }

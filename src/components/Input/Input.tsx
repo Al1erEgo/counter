@@ -13,17 +13,13 @@ export const Input: React.FC<InputPropsType> = (props) => {
 
     const {currentValue, setValue, onFocus, onBlur, error} = props
 
-    const onChangeHandler = (event:ChangeEvent<HTMLInputElement>) => {
+    const onChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
         setValue(Number(event.currentTarget.value))
     }
 
-    const onFocusHandler = () => {
-        onFocus?.()
-    }
+    const onFocusHandler = () => onFocus?.()
 
-    const onBlurHandler = () => {
-        onBlur?.()
-    }
+    const onBlurHandler = () => onBlur?.()
 
     const inputClass = `${s.input} ${error && s.error}`
 

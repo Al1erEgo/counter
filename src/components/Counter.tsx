@@ -25,6 +25,7 @@ export const Counter: React.FC<CounterPropsType> = (props) => {
     const firstRender = useRef(false)
     useLayoutEffect(() => {
         firstRender.current && setCounter(startValue)
+        switcher && !firstRender.current && setCounter(startValue)
         !firstRender.current && (firstRender.current = true)
     }, [startValue])
 

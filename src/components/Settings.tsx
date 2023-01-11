@@ -7,8 +7,8 @@ import {useNavigate} from "react-router-dom";
 
 type SettingsPropsType = {
     settings: SettingsType
-    setSettings: (startValue: number, maxValue: number, info: string, error: string, switcher: boolean) => void
-    setStartValue: (startValue: number) => void
+    setSettings: (currentCounter: number, startValue: number, maxValue: number, info: string, error: string, switcher: boolean) => void
+    setCounter: (newCounter: number) => void
     setInfo: (info: string) => void
     setError: (error: string) => void
     setSwitcher?: (switcher: boolean) => void
@@ -16,22 +16,21 @@ type SettingsPropsType = {
 
 export const Settings: React.FC<SettingsPropsType> = (props) => {
 
-    const {settings, setSettings, setStartValue: setStartValueToSettings, setInfo, setError, setSwitcher} = props
+    const {settings, setSettings, setCounter, setInfo, setError, setSwitcher} = props
 
     const [startValue, setStartValue] = useState<number>(settings.startValue)
     const [maxValue, setMaxValue] = useState<number>(settings.maxValue)
 
     const navigate = useNavigate()
 
-    // const setButtonCondition = ((startValue === settings.startValue && maxValue === settings.maxValue) || !!(settings.error))
-    const setButtonCondition = useMemo ( () =>((startValue === settings.startValue && maxValue === settings.maxValue) || !!(settings.error)) ,[settings.error, startValue, maxValue])
+    const setButtonCondition = useMemo ( () =>((startValue === settings.startValue && maxValue === settings.maxValue) || !!(settings.error)) ,[settings.error, startValue, maxValue, settings.startValue, settings.maxValue])
     const backButtonCondition = !!(settings.error)
 
     const maxValueImportError = maxValue < 0 || startValue > maxValue
     const startValueImportError = startValue < 0 || startValue > maxValue
 
-    const setSettingsCallbackHandler = () => setSettings(startValue, maxValue, '', '', settings.switcher)
-    const setStartValueCallbackHandler = () => setStartValueToSettings(startValue)
+    const setSettingsCallbackHandler = () => setSettings(startValue, startValue, maxValue, '', '', settings.switcher)
+    const setCounterCallbackHandler = () => setCounter(startValue)
 
     const backToCounterCallback = () => navigate('/counter')
 
@@ -96,7 +95,7 @@ export const Settings: React.FC<SettingsPropsType> = (props) => {
                 <div>
                     <Button name={'Set'}
                             callback={setSettingsCallbackHandler}
-                            onMouseDownCallback={setStartValueCallbackHandler}
+                            onMouseDownCallback={setCounterCallbackHandler}
                             disabled={setButtonCondition}/>
                     {settings.switcher &&
                         <Button name={'Back to counter'}

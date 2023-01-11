@@ -6,6 +6,7 @@ import {Navigate, Route, Routes} from "react-router-dom";
 import {Error404} from "./components/Error404/Error404";
 
 export type SettingsType = {
+    currentCounter: number
     startValue: number
     maxValue: number
     info: string
@@ -18,6 +19,7 @@ function App() {
     const [settings, setSettings] = useState<SettingsType>(() => {
         const settingsFromLS = localStorage.getItem('Settings')
         return settingsFromLS ? JSON.parse(settingsFromLS) : {
+            currentCounter: 0,
             startValue: 0,
             maxValue: 5,
             info: '',
@@ -26,11 +28,11 @@ function App() {
         }
     })
 
-    const setSettingsCallback = (startValue: number, maxValue: number, info: string, error: string, switcher: boolean) => {
-        setSettings({startValue, maxValue, info, error, switcher})
+    const setSettingsCallback = (currentCounter: number, startValue: number, maxValue: number, info: string, error: string, switcher: boolean) => {
+        setSettings({currentCounter, startValue, maxValue, info, error, switcher})
     }
 
-    const setStartValueCallback = (startValue: number) => setSettings({...settings, startValue})
+    const setCounter = (newCounter: number) =>  setSettings({...settings, currentCounter: newCounter})
     const setInfoCallback = (info: string) => setSettings({...settings, info})
     const setErrorCallback = (error: string) => setSettings({...settings, error})
     const setSwitcherCallback = (switcher: boolean) => setSettings({...settings, switcher})
@@ -46,11 +48,12 @@ function App() {
                     settings.switcher ?
                         <>
                             <Route path={'/counter'} element={<Counter  settings={settings}
+                                                                        setCounter={setCounter}
                                                                         setSwitcher={setSwitcherCallback}
                             />}/>
                             <Route path={'/settings'} element={<Settings settings={settings}
                                                                          setSettings={setSettingsCallback}
-                                                                         setStartValue={setStartValueCallback}
+                                                                         setCounter={setCounter}
                                                                          setInfo={setInfoCallback}
                                                                          setError={setErrorCallback}
                                                                          setSwitcher={setSwitcherCallback}
@@ -58,11 +61,12 @@ function App() {
                         </>
                         :
                         <Route path={'/counter'} element={<><Counter settings={settings}
+                                                                     setCounter={setCounter}
                                                                      setSwitcher={setSwitcherCallback}
                         />
                             <Settings settings={settings}
                                       setSettings={setSettingsCallback}
-                                      setStartValue={setStartValueCallback}
+                                      setCounter={setCounter}
                                       setInfo={setInfoCallback}
                                       setError={setErrorCallback}
                             /></>

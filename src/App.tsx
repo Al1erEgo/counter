@@ -30,6 +30,7 @@ function App() {
         setSettings({startValue, maxValue, info, error, switcher})
     }
 
+    const setStartValueCallback = (startValue: number) => setSettings({...settings, startValue})
     const setInfoCallback = (info: string) => setSettings({...settings, info})
     const setErrorCallback = (error: string) => setSettings({...settings, error})
     const setSwitcherCallback = (switcher: boolean) => setSettings({...settings, switcher})
@@ -49,6 +50,7 @@ function App() {
                             />}/>
                             <Route path={'/settings'} element={<Settings settings={settings}
                                                                          setSettings={setSettingsCallback}
+                                                                         setStartValue={setStartValueCallback}
                                                                          setInfo={setInfoCallback}
                                                                          setError={setErrorCallback}
                                                                          setSwitcher={setSwitcherCallback}
@@ -60,6 +62,7 @@ function App() {
                         />
                             <Settings settings={settings}
                                       setSettings={setSettingsCallback}
+                                      setStartValue={setStartValueCallback}
                                       setInfo={setInfoCallback}
                                       setError={setErrorCallback}
                             /></>

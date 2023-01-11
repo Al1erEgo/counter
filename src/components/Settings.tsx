@@ -50,7 +50,7 @@ export const Settings: React.FC<SettingsPropsType> = (props) => {
 
     useEffect(() => setErrorHandler(errorMessage), [errorMessage, setErrorHandler])
 
-    const headerStyle = `${s.header} ${errorMessage && s.headerError}`
+    const headerStyle = `${s.header} ${errorMessage && settings.switcher && s.headerError}`
 
     return (<>
             {settings.switcher &&
@@ -58,7 +58,7 @@ export const Settings: React.FC<SettingsPropsType> = (props) => {
             }
             <div className={s.settingsParent}>
                 <div className={headerStyle}>
-                    {errorMessage ?
+                    {errorMessage && settings.switcher ?
                         <>
                             <p>WARNING !!!</p>
                             <p>{errorMessage}</p>

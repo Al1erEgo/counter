@@ -27,7 +27,6 @@ function App() {
 
     const [settings, setSettings] = useState<SettingsType>(() => {
         const settingsFromLS = localStorage.getItem('Settings')
-
         const parsedSettings: SettingsType = settingsFromLS && localStorageCheck(settingsFromLS) ? JSON.parse(settingsFromLS) : {
             currentCounter: 0,
             startValue: 0,

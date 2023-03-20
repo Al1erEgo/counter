@@ -1,8 +1,16 @@
-import {combineReducers, createStore} from "redux";
+import {combineReducers, legacy_createStore} from "redux";
 import {counterReducer} from "./counterReducer";
+import {loadStateFromLS, throttledSaveStateToLS} from "./localStorage";
 
 export const rootReducer = combineReducers({
     counter: counterReducer,
 })
 
-export const store = createStore(rootReducer)
+const persistedState = loadStateFromLS()
+export const store = legacy_createStore(rootReducer, persistedState)
+
+store.subscribe(()=>{
+    throttledSaveStateToLS({
+        counter: store.getState().counter
+    })
+})

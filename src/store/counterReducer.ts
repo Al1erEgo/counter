@@ -25,6 +25,12 @@ export const counterReducer = (state: CounterType = initialState, action: Counte
         case "SET_INFO": {
             return {...state, info: action.payload.info}
         }
+        case "SWITCH" : {
+            return {...state, switcher: action.payload.switcher}
+        }
+        case "SET_VALUES" : {
+            return {...state, startValue: action.payload.startValue, maxValue: action.payload.maxValue, currentCounter: action.payload.startValue}
+        }
         default:
             return state
     }
@@ -36,19 +42,16 @@ export const increaseCounterAC = () => {
         type: 'INCREASE_COUNTER'
     } as const
 }
-
 export const decreaseCounterAC = () => {
     return {
         type: 'DECREASE_COUNTER'
     } as const
 }
-
 export const resetCounterAC = () => {
     return {
         type: 'RESET_COUNTER'
     } as const
 }
-
 export const setErrorAC = (error: string) => {
     return {
         type: 'SET_ERROR',
@@ -57,7 +60,6 @@ export const setErrorAC = (error: string) => {
         }
     } as const
 }
-
 export const setInfoAC = (info: string) => {
     return {
         type: 'SET_INFO',
@@ -66,3 +68,21 @@ export const setInfoAC = (info: string) => {
         }
     } as const
 }
+export const switchAC = (switcher: boolean) => {
+    return {
+        type: "SWITCH",
+        payload: {
+            switcher,
+        }
+    } as const
+}
+export const setValuesAC = (startValue: number, maxValue: number) => {
+    return {
+        type: "SET_VALUES",
+        payload: {
+            startValue,
+            maxValue,
+        }
+    } as const
+}
+

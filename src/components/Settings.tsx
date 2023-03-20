@@ -2,74 +2,75 @@ import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import s from "./Settings.module.css";
 import {Button} from "./Button/Button";
 import {Input} from "./Input/Input";
-import {SettingsType} from "../App";
 import {useNavigate} from "react-router-dom";
+import {useDispatch, useSelector} from "react-redux";
+import {AppRootStateType, CounterType} from "../types/types";
+import {setErrorAC, setInfoAC, setValuesAC, switchAC} from "../store/counterReducer";
 
-type SettingsPropsType = {
-    settings: SettingsType
-    setSettings: (currentCounter: number, startValue: number, maxValue: number, info: string, error: string, switcher: boolean) => void
-    setCounter: (newCounter: number) => void
-    setInfo: (info: string) => void
-    setError: (error: string) => void
-    setSwitcher?: (switcher: boolean) => void
-}
 
-export const Settings: React.FC<SettingsPropsType> = (props) => {
+export const Settings: React.FC = () => {
 
-    const {settings, setSettings, setCounter, setInfo, setError, setSwitcher} = props
-
-    const [startValue, setStartValue] = useState<number>(settings.startValue)
-    const [maxValue, setMaxValue] = useState<number>(settings.maxValue)
-
+    const dispatch = useDispatch()
     const navigate = useNavigate()
 
-    const setButtonCondition = useMemo ( () =>((startValue === settings.startValue && maxValue === settings.maxValue) || !!(settings.error)) ,[settings.error, startValue, maxValue, settings.startValue, settings.maxValue])
-    const backButtonCondition = !!(settings.error)
+    const state = useSelector<AppRootStateType, CounterType>(state => state.counter)
 
+    //Локальный контроль настроек
+    const [startValue, setStartValue] = useState<number>(state.startValue)
+    const [maxValue, setMaxValue] = useState<number>(state.maxValue)
+
+    //Состояние кнопок в зависимости от текущих значений инпутов
+    const setButtonCondition = useMemo ( () =>((startValue === state.startValue && maxValue === state.maxValue) || !!(state.error)) ,[state.error, startValue, maxValue, state.startValue, state.maxValue])
+    const backButtonCondition = !!(state.error)
+
+    //Состояние инпутов в зависимости от текущих значений
     const maxValueImportError = maxValue < 0 || startValue > maxValue
     const startValueImportError = startValue < 0 || startValue > maxValue
 
-    const setSettingsCallbackHandler = () => setSettings(startValue, startValue, maxValue, '', '', settings.switcher)
-    const setCounterCallbackHandler = () => setCounter(startValue)
+    //Установка текущих значений в стор
+    const setSettingsCallbackHandler = () => dispatch(setValuesAC(startValue, maxValue))
 
-    const backToCounterCallback = () => navigate('/counter')
 
-    const onFocusCallback = () => !settings.info && !settings.error && setInfo("Enter values and press Set")
 
-    const onBlurCallback = () => setInfo('')
+    //Сообщение для табло, при фокусе на инпутах, если нет других сообщений и ошибок
+    const onFocusCallback = () => !state.info && !state.error && dispatch(setInfoAC("Enter values and press Set"))
+    //Сообщение при расфокусе
+    const onBlurCallback = () => dispatch(setInfoAC(""))
 
+    //Навигация
     const setSwitchSeparateCallback = () => {
-        setSwitcher?.(!settings.switcher)
+        dispatch(switchAC(!state.switcher))
         navigate('/counter')
     }
+    const backToCounterCallback = () => navigate('/counter')
 
+    //Сообщение об ошибке в зависимости от текущих значений
     const errorMessage = startValue < 0 || maxValue < 0 ? 'Value must be positive!' : startValue > maxValue ? 'Max value must be greater than start value' : ''
-
     const setErrorHandler = useCallback((errorMessage: string) => {
-        settings.error !== errorMessage && setError(errorMessage)
-    }, [settings.error, setError])
+        state.error !== errorMessage && dispatch(setErrorAC(errorMessage))
+    }, [state.error, dispatch])
 
     useEffect(() => setErrorHandler(errorMessage), [errorMessage, setErrorHandler])
 
-    const headerStyle = `${s.header} ${errorMessage && settings.switcher && s.headerError}`
+    const headerStyle = `${s.header} ${errorMessage && state.switcher && s.headerError}`
 
     return (<>
-            {settings.switcher &&
+            {state.switcher &&
                 <Button name={'Switch to SOLID'} callback={setSwitchSeparateCallback}/>
             }
             <div className={s.settingsParent}>
                 <div className={headerStyle}>
-                    {errorMessage && settings.switcher ?
+                    {errorMessage && state.switcher ?
                         <>
                             <p>WARNING !!!</p>
                             <p>{errorMessage}</p>
                         </>
-                        : settings.info && settings.switcher ?
-                            <p>{settings.info}</p>
+                        : state.info && state.switcher ?
+                            <p>{state.info}</p>
                             :
                             <>
                                 <p>CURRENT VALUES:</p>
-                                <p>Max value: {settings.maxValue} & Start value: {settings.startValue}</p>
+                                <p>Max value: {state.maxValue} & Start value: {state.startValue}</p>
                             </>}
                 </div>
                 <div className={s.inputContainer}>
@@ -94,10 +95,9 @@ export const Settings: React.FC<SettingsPropsType> = (props) => {
                 </div>
                 <div>
                     <Button name={'Set'}
-                            callback={setSettingsCallbackHandler}
-                            onMouseDownCallback={setCounterCallbackHandler}
+                            onMouseDownCallback={setSettingsCallbackHandler}
                             disabled={setButtonCondition}/>
-                    {settings.switcher &&
+                    {state.switcher &&
                         <Button name={'Back to counter'}
                                 callback={backToCounterCallback}
                                 disabled={backButtonCondition}/>

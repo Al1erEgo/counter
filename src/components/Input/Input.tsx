@@ -9,9 +9,8 @@ type InputPropsType = {
     error?: boolean
 }
 
-export const Input: React.FC<InputPropsType> = (props) => {
+export const Input: React.FC<InputPropsType> = ({currentValue, setValue, onFocus, onBlur, error}) => {
 
-    const {currentValue, setValue, onFocus, onBlur, error} = props
 
     const onChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
         setValue(Number(event.currentTarget.value))

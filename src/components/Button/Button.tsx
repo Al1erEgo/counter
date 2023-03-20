@@ -3,24 +3,24 @@ import s from './Button.module.css';
 
 type ButtonPropsType = {
     name: string
-    callback: () => void
+    callback?: () => void
     onMouseDownCallback?: () => void
     disabled?: boolean
 }
 
-export const Button: React.FC<ButtonPropsType> = (props) => {
+export const Button: React.FC<ButtonPropsType> = ({name, callback, onMouseDownCallback, disabled}) => {
 
-    const onClickCallbackHandler = () => props.callback?.()
+    const onClickCallbackHandler = () => callback?.()
 
-    const onMouseDownHandler = () => props.onMouseDownCallback?.()
+    const onMouseDownHandler = () => onMouseDownCallback?.()
 
-    const buttonStyle = `${props.disabled ? s.disabled : s.default}`
+    const buttonStyle = `${disabled ? s.disabled : s.default}`
 
     return (
         <button onMouseDown={onMouseDownHandler}
                 onClick={onClickCallbackHandler}
-                disabled={props.disabled}
+                disabled={disabled}
                 className={buttonStyle}
-        >{props.name}</button>
+        >{name}</button>
     );
 };

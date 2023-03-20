@@ -2,48 +2,47 @@ import React from 'react';
 import {Board} from "./Board/Board";
 import {Button} from "./Button/Button";
 import s from './Counter.module.css';
-import {SettingsType} from "../App";
 import {useNavigate} from "react-router-dom";
+import {useDispatch, useSelector} from "react-redux";
+import {AppRootStateType, CounterType} from "../types/types";
+import {increaseCounterAC, resetCounterAC, switchAC} from "../store/counterReducer";
 
-type CounterPropsType = {
-    settings: SettingsType
-    setCounter: (newCounter: number) => void
-    setSwitcher: (switcher: boolean) => void
-}
 
-export const Counter: React.FC<CounterPropsType> = (props) => {
 
-    const {
-        settings: {currentCounter, startValue, maxValue, info, error, switcher},
-        setCounter,
-        setSwitcher
-    } = props
+export const Counter: React.FC = () => {
 
-    const counterStep = 1
+    const state = useSelector<AppRootStateType, CounterType>(state => state.counter)
+    const dispatch = useDispatch()
 
-    const switcherName = switcher ? 'Switch to SOLID' : 'Switch to Separate'
-    const setSwitchSeparateCallback = () => setSwitcher(!switcher)
+    //Название переключателя в зависимости от текущего вида
+    const switcherName = state.switcher ? 'Switch to SOLID' : 'Switch to Separate'
+    //Колбэк для кнопки переключателя
+    const setSwitchSeparateCallback = () => dispatch(switchAC(!state.switcher))
 
-    const increaseCounter = () => currentCounter < maxValue && setCounter(currentCounter + counterStep)
-    const resetCounter = () => setCounter(startValue)
+    //Действия с самим счетчиком
+    const increaseCounter = () => state.currentCounter < state.maxValue && dispatch(increaseCounterAC())
+    const resetCounter = () => dispatch(resetCounterAC())
 
+    //Навигация для переключателя
     const navigate = useNavigate()
     const settingsOnClickCallback = () => navigate('/settings')
 
-    const counterLimit = !!(currentCounter >= maxValue || info || error)
-    const counterLimit2 = !!(currentCounter <= startValue || info || error)
+    //Ограничение значений каунтера которое дизейблит кнопки
+    const counterLimit = !!(state.currentCounter >= state.maxValue || state.info || state.error)
+    const counterLimit2 = !!(state.currentCounter <= state.startValue || state.info || state.error)
 
-    const titleForBoard = error ? error : info ? info : currentCounter.toString()
+    //Вывод для табло(ошибка или инфо или счетчик)
+    const titleForBoard = state.error ? state.error : state.info ? state.info : state.currentCounter.toString()
 
     return (<>
             <Button name={switcherName}
                     callback={setSwitchSeparateCallback}/>
             <div className={s.counterParent}>
                 <Board title={titleForBoard}
-                       currentCount={currentCounter}
-                       maxValue={maxValue}
-                       info={info}
-                       error={error}/>
+                       currentCount={state.currentCounter}
+                       maxValue={state.maxValue}
+                       info={state.info}
+                       error={state.error}/>
                 <div>
                     <Button name={'Increase'}
                             callback={increaseCounter}
@@ -51,7 +50,7 @@ export const Counter: React.FC<CounterPropsType> = (props) => {
                     <Button name={'Reset'}
                             callback={resetCounter}
                             disabled={counterLimit2}/>
-                    {switcher &&
+                    {state.switcher &&
                         <Button name={'Settings'}
                                 callback={settingsOnClickCallback}
                         />
